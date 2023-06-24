@@ -1,0 +1,88 @@
+body {
+  overflow: hidden;
+  color: white;
+  font-size: 1.5vh;
+}
+
+.progressbar-health {
+  position: absolute;
+  top: 97%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: fit-content;
+  height: fit-content;
+  border-radius: 0.4vh;
+  background-color: transparent;
+}
+
+.health {
+  width: fit-content;
+  height: fit-content;
+}
+
+.wid {
+  width: 5vw !important;
+}
+
+.progressbar-2 {
+  position: absolute;
+  top: 6vh;
+  width: 13vw;
+  right: 3vh;
+  border-radius: 2vh;
+  background-color: #375569;
+}
+
+.animation {
+  animation: numberAnim 200ms forwards;
+}
+.pro-2 {
+  background-color: #3fa6eb;
+  width: 50%;
+  height: 1vh;
+  border-radius: 2.6vw;
+}
+.pro-2 i {
+  position: relative;
+  right: 2vh;
+  top: -0.3vh;
+}
+
+.centerig {
+  position: absolute;
+  top: 95.5%;
+  left: 92%;
+  transform: translate(-50%, -50%);
+  height: fit-content;
+  width: 13vw;
+}
+
+.misc {
+  width: 7.8vw;
+  text-align: center;
+}
+
+@keyframes numberAnim {
+	0%, 100% {
+    scale: 1;
+    opacity: 1;
+	}
+	50% {
+		scale: 2;
+		opacity: 0;
+	}
+}
+
+
+@keyframes counting {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-count {
+  animation: counting 1s ease-in-out;
+}

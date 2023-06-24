@@ -1,0 +1,43 @@
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+
+<div class="centerig">
+  <div class="grid grid-cols-2 gap-2 text-center">
+    <p class="font-bold bg-black p-2 rounded">
+      <i class="fa-solid fa-car text-yellow-500"></i> <span id="mph">0 MP/H</span>
+    </p>
+    <p class="font-bold bg-black p-2 rounded">
+      <i class="fa-solid fa-gear text-gray-500"></i> <span id="gear">0</span>
+    </p>
+    <p class="font-bold bg-black p-2 rounded col-span-2">
+      <i class="fa-solid fa-gas-pump text-white"></i> <span id="fuel">0%</span>
+    </p>
+  </div>
+</div>
+
+  <div class="progressbar-health">
+    <div class="health">
+      <div class="flex gap-2 justify-center align-center mt-4 text-center">
+        <p class="font-bold bg-black p-2 rounded wid">
+          <i class="fa-solid fa-heart text-red-500"></i> <span id="user-health"> 0%</span>
+        </p>
+        <p class="font-bold bg-black p-2 rounded wid">
+         <i class="fa-solid fa-shield-alt text-blue-500"></i> <span id="user-armour"> 0%</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  </div>
+  
+</body>
