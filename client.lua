@@ -31,6 +31,36 @@ local function loadHudQB()
     end)
 end
 
+local function loadCarHudQB()
+    CreateThread(function()
+      while loaded do
+        local ped = PlayerPedId()
+        local isInVehicle = IsPedInAnyVehicle(ped, false)
+        Wait(1000)
+        if isInVehicle then
+            local vehicle = GetVehiclePedIsIn(ped, false)
+            local fuel = GetVehicleFuelLevel(vehicle)
+            local gear = GetVehicleCurrentGear(vehicle)
+            local speed = GetEntitySpeed(vehicle) * 2.237
+            SendNUIMessage({
+                action = 'showUI',
+            })
+            SendNUIMessage({
+                action = 'updateVeh',
+                speed = speed,
+                fuel = fuel,
+                gear = gear,
+            })
+            Wait(0)
+        else
+            SendNUIMessage({
+                action = 'hideUI',
+            })
+            end
+        end
+    end)
+end
+
 
 -- QB MultiCharacter Fix
 if GetResourceState("qb-core") == "started" then
@@ -42,40 +72,12 @@ if GetResourceState("qb-core") == "started" then
         -- PlayerData = QBCore.Functions.GetPlayerData()
         loaded = true
         loadHudQB()
+        loadCarHudQB()
         print("Done")
         Wait(3000)
         SetEntityHealth(PlayerPedId(), 200)
     end)
 end
-
-
-CreateThread(function()
-    while true do
-        local ped = PlayerPedId()
-        local isInVehicle = IsPedInAnyVehicle(ped, false)
-        Wait(1000)
-        if isInVehicle then
-            local vehicle = GetVehiclePedIsIn(ped, false)
-            local fuel = GetVehicleFuelLevel(vehicle)
-            local gear = GetVehicleCurrentGear(vehicle)
-            local speed = GetEntitySpeed(vehicle) * 2.237
-            SendNUIMessage({
-                action = 'showUI',
-            });
-            SendNUIMessage({
-                action = 'updateVeh',
-                speed = speed,
-                fuel = fuel,
-                gear = gear,
-            });
-            Wait(0)
-        else
-            SendNUIMessage({
-                action = 'hideUI',
-            });
-        end
-    end
-end)
 
 RegisterCommand("die", function()
     SetEntityHealth(ped, 0)
