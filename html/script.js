@@ -1,6 +1,8 @@
 window.addEventListener("message", function (event) {
+  const uiElement = document.querySelector(".ui");
   const userHealth = document.getElementById("user-health");
   const userArmour = document.getElementById("user-armour");
+  const mic = document.getElementById("mic");
   const mph = document.getElementById("mph");
   const vehGear = document.getElementById("gear");
   const vehFuel = document.getElementById("fuel");
@@ -9,9 +11,12 @@ window.addEventListener("message", function (event) {
     case "update":
       var health = Math.min(event.data.health, 200);
       var armour = Math.floor(event.data.armour);
+      var talking = event.data.talking
       health = Math.floor(health / 2);
       animateCount(userHealth, health, "%");
       animateCount(userArmour, armour, "%");
+      if (talking) mic.style.color = "cyan";
+      if (!talking) mic.style.color = "white";
       break;
     case "updateVeh":
       centerigElement.style.display = "block";
@@ -27,6 +32,9 @@ window.addEventListener("message", function (event) {
       centerigElement.style.display = "none";
       break;
   }
+  if (event.data.displayUI) {
+    uiElement.style.display = "block";
+  };
 });
 
 function animateCount(element, newValue, symbol = "") {

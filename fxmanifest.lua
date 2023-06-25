@@ -5,7 +5,12 @@ lua54 'yes'
 author 'Discord: vipex.v'
 descrition 'v-hud'
 
-client_script "client.lua"
+shared_script "config.lua"
+
+client_scripts {
+  "config.lua",
+  "client.lua"
+}
 
 ui_page 'html/index.html'
 
