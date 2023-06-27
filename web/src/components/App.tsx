@@ -4,6 +4,7 @@ import { debugData } from "../utils/debugData";
 import { fetchNui } from "../utils/fetchNui";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { animateNumber } from "../utils/animateNumber";
+
 // This will set the NUI to visible if we are
 // developing in browser
 debugData([

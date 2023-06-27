@@ -6,7 +6,7 @@ author 'Discord: vipex.v'
 ui_page 'web/build/index.html'
 
 client_script "client/**/*"
-server_script "server/**/*"
+-- server_script "server/**/*"
 
 files {
 	'web/build/index.html',
