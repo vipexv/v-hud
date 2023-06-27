@@ -1,19 +1,14 @@
-fx_version 'cerulean'
-game 'gta5'
+fx_version "cerulean"
 lua54 'yes'
+game 'gta5'
 
 author 'Discord: vipex.v'
-descrition 'v-hud'
+ui_page 'web/build/index.html'
 
-shared_script "config.lua"
-
-client_scripts {
-  "config.lua",
-  "client.lua"
-}
-
-ui_page 'html/index.html'
+client_script "client/**/*"
+server_script "server/**/*"
 
 files {
-  'html/*'
+	'web/build/index.html',
+	'web/build/**/*',
 }
