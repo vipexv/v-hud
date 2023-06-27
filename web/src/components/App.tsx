@@ -52,7 +52,7 @@ const App: React.FC = () => {
     // MPH Text
     var speed = Math.floor(retData.speed);
     // mph.textContent = ` ${speed} MP/H`;
-    animateNumber(mph, speed, "%");
+    animateNumber(mph, speed, "MP/H");
 
     // Gear
     // gear.textContent = `${retData.gear}`;
