@@ -17,7 +17,9 @@ debugData([
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [vehHud, setVehVisiblity] = useState(false);
+  const [qbcore, setqbcore] = useState(false);
   useNuiEvent("setVisible", setVisible);
+  useNuiEvent("setqbcore", setqbcore);
   useNuiEvent("setVehV", setVehVisiblity);
   useNuiEvent("hudStats", (retData) => {
     const userHealth = document.getElementById(
@@ -27,7 +29,6 @@ const App: React.FC = () => {
       "user-armour"
     ) as HTMLSpanElement;
     const micStatus = document.getElementById("mic") as HTMLLIElement;
-
     // Health
     var health = Math.floor(retData.hp / 2);
     // userHealth.textContent = `${health}%`;
@@ -67,6 +68,19 @@ const App: React.FC = () => {
     animateNumber(fuel, retData.fuel, "%");
   });
 
+  useNuiEvent("qbStatus", (data) => {
+    const userHunger = document.getElementById(
+      "user-hunger"
+    ) as HTMLSpanElement;
+    const userThirst = document.getElementById(
+      "user-thirst"
+    ) as HTMLSpanElement;
+
+    animateNumber(userHunger, data.hunger, "%");
+
+    animateNumber(userThirst, data.thirst, "%");
+  });
+
   return (
     <>
       {/* Hud */}
@@ -80,8 +94,22 @@ const App: React.FC = () => {
               <i className="fa-solid fa-heart text-red-500"></i>{" "}
               <span id="user-health"> 0%</span>
             </p>
+            <p
+              className="font-bold bg-black p-2 rounded wid"
+              style={{ display: qbcore ? "block" : "none" }}
+            >
+              <i className="fa-solid fa-burger text-yellow-500"></i>{" "}
+              <span id="user-hunger"> 100%</span>
+            </p>
             <p className="font-bold bg-black p-2 rounded w-10">
               <i className="fa-solid fa-microphone mt-1" id="mic"></i>
+            </p>
+            <p
+              className="font-bold bg-black p-2 rounded wid"
+              style={{ display: qbcore ? "block" : "none" }}
+            >
+              <i className="fa-solid fa-droplet text-blue-600"></i>{" "}
+              <span id="user-thirst"> 100%</span>
             </p>
             <p className="font-bold bg-black p-2 rounded wid">
               <i className="fa-solid fa-shield-alt text-blue-500"></i>{" "}

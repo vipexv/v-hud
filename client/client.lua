@@ -1,8 +1,16 @@
+  if Config.QBCore then
+      QBCore = exports["qb-core"]:GetCoreObject()
+  end
+
+  -- PlayerData = QBCore.Functions.GetPlayerData()
+
 local function toggleNuiFrame(shouldShow)
   -- SetNuiFocus(shouldShow, shouldShow)
   SendReactMessage('setVisible', shouldShow)
+  if Config.QBCore then
+      SendReactMessage('setqbcore', true)
+  end
 end
-
 
 local function toggleVehHudFrame(shouldShow)
   -- SetNuiFocus(shouldShow, shouldShow)
@@ -23,21 +31,28 @@ local function loadHud()
       local hp = GetEntityHealth(ped)
       local armour = GetPedArmour(ped)
       local talking = NetworkIsPlayerTalking(PlayerId())
+      local playerStatsChanged = false
+      
       if hp ~= oldHealth or armour ~= oldArmour or talking ~= oldState then
-          local playerStats = {
-            hp = hp,
-            armour = armour,
-            micActive = talking
-          }
-          SendReactMessage("hudStats", playerStats)
-          oldHealth = hp
-          oldArmour = armour
-          oldState = talking
+        playerStatsChanged = true
+      end
+      
+      if playerStatsChanged then
+        local playerStats = {
+          hp = hp,
+          armour = armour,
+          micActive = talking,
+        }
+        SendReactMessage("hudStats", playerStats)
+        oldHealth = hp
+        oldArmour = armour
+        oldState = talking
       end
       Wait(1000)
     end
   end)
 end
+
 
 local function loadCarHud()
   CreateThread(function()
@@ -65,16 +80,40 @@ local function loadCarHud()
   end)
 end
 
+
+local function loadHudQB()
+  CreateThread(function()
+    local oldHunger = nil
+    local oldThirst = nil
+    while loaded do
+        local PlayerData = QBCore.Functions.GetPlayerData()
+        local hunger = math.floor(PlayerData.metadata['hunger'])
+        local thirst = math.floor(PlayerData.metadata['thirst'])
+        local qbData = {
+          hunger = hunger,
+          thirst = thirst
+        }
+        if oldHunger ~= hunger or oldThirst ~= thirst then
+        SendReactMessage("qbStatus", qbData)
+        -- print(qbData.hunger)
+        oldHunger = hunger
+        oldThirst = thirst
+        end
+      Wait(1000)
+    end
+  end)
+end
+
 -- QB-Multicharacter Fix.
 
-if GetResourceState("qb-core") == "started" then
-  local QBCore = exports["qb-core"]:GetCoreObject()
+if Config.QBCore then
   RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     QBCore.Functions.Notify("Loading Hud!", 'success', 1000)
     Wait(2000)
     loaded = true
     loadHud()
     loadCarHud()
+    loadHudQB()
     QBCore.Functions.Notify("Hud Loaded!", 'success', 1000)
     print("Loaded Hud!")
   end)
@@ -90,4 +129,5 @@ if GetResourceState("qb-core") == "started" then
     loaded = true
     loadHud()
     loadCarHud()
+    loadHudQB()
   end)
