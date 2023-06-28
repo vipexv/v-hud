@@ -7,8 +7,9 @@
 local function toggleNuiFrame(shouldShow)
   -- SetNuiFocus(shouldShow, shouldShow)
   SendReactMessage('setVisible', shouldShow)
-  if Config.QBCore then
-      SendReactMessage('setqbcore', true)
+  if Config.QBCore or Config.ESX then
+      SendReactMessage('framework', true)
+      print("done")
   end
 end
 
@@ -19,6 +20,7 @@ end
 
 
 loaded = false
+
 
 local function loadHud()
   toggleNuiFrame(true)
@@ -64,7 +66,8 @@ local function loadCarHud()
         local vehicle = GetVehiclePedIsIn(ped, false)
         local gear = GetVehicleCurrentGear(vehicle)
         local fuel = GetVehicleFuelLevel(vehicle)
-        local speed = GetEntitySpeed(vehicle) * 2.237 --Feel free to edit this if needed to switch to KMH, currently using MPH.
+        local speedVal = GetEntitySpeed(vehicle) * 2.237 --Feel free to edit this if needed to switch to KMH, currently using MPH.
+        local speed = math.floor(speedVal)
         -- toggleNuiFrame(true)
         toggleVehHudFrame(true)
         local vehStats = {
@@ -94,7 +97,7 @@ local function loadHudQB()
           thirst = thirst
         }
         if oldHunger ~= hunger or oldThirst ~= thirst then
-        SendReactMessage("qbStatus", qbData)
+        SendReactMessage("frameworkStatus", qbData)
         -- print(qbData.hunger)
         oldHunger = hunger
         oldThirst = thirst
@@ -102,6 +105,23 @@ local function loadHudQB()
       Wait(1000)
     end
   end)
+end
+
+if Config.ESX then
+    AddEventHandler('esx_status:onTick', function(data)
+        local hunger, thirst
+        for i = 1, #data do
+            if data[i].name == 'thirst' then thirst = math.floor(data[i].percent) end
+            if data[i].name == 'hunger' then hunger = math.floor(data[i].percent) end
+        end
+
+        local ped = PlayerPedId()
+        esxStatus = {
+          hunger = hunger,
+          thirst = thirst
+        }
+        SendReactMessage("frameworkStatus", esxStatus)
+    end)
 end
 
 -- QB-Multicharacter Fix.

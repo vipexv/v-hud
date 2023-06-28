@@ -17,9 +17,9 @@ debugData([
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [vehHud, setVehVisiblity] = useState(false);
-  const [qbcore, setqbcore] = useState(false);
+  const [framework, setframework] = useState(false);
   useNuiEvent("setVisible", setVisible);
-  useNuiEvent("setqbcore", setqbcore);
+  useNuiEvent("framework", setframework);
   useNuiEvent("setVehV", setVehVisiblity);
   useNuiEvent("hudStats", (retData) => {
     const userHealth = document.getElementById(
@@ -55,9 +55,8 @@ const App: React.FC = () => {
     const fuel = document.getElementById("fuel") as HTMLSpanElement;
 
     // MPH Text
-    var speed = Math.floor(retData.speed);
     // mph.textContent = ` ${speed} MP/H`;
-    animateNumber(mph, speed, "MP/H");
+    animateNumber(mph, retData.speed, " MP/H");
 
     // Gear
     // gear.textContent = `${retData.gear}`;
@@ -68,7 +67,7 @@ const App: React.FC = () => {
     animateNumber(fuel, retData.fuel, "%");
   });
 
-  useNuiEvent("qbStatus", (data) => {
+  useNuiEvent("frameworkStatus", (data) => {
     const userHunger = document.getElementById(
       "user-hunger"
     ) as HTMLSpanElement;
@@ -96,7 +95,7 @@ const App: React.FC = () => {
             </p>
             <p
               className="font-bold bg-black p-2 rounded wid"
-              style={{ display: qbcore ? "block" : "none" }}
+              style={{ display: framework ? "block" : "none" }}
             >
               <i className="fa-solid fa-burger text-yellow-500"></i>{" "}
               <span id="user-hunger"> 100%</span>
@@ -106,7 +105,7 @@ const App: React.FC = () => {
             </p>
             <p
               className="font-bold bg-black p-2 rounded wid"
-              style={{ display: qbcore ? "block" : "none" }}
+              style={{ display: framework ? "block" : "none" }}
             >
               <i className="fa-solid fa-droplet text-blue-600"></i>{" "}
               <span id="user-thirst"> 100%</span>
