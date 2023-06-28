@@ -27,14 +27,12 @@ local function loadHud()
           local playerStats = {
             hp = hp,
             armour = armour,
-            talking = talking
+            micActive = talking
           }
           SendReactMessage("hudStats", playerStats)
           oldHealth = hp
           oldArmour = armour
           oldState = talking
-          -- print("Updated Hud!")
-          -- print(oldHealth)
       end
       Wait(1000)
     end

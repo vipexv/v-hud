@@ -38,9 +38,9 @@ const App: React.FC = () => {
     animateNumber(userArmour, retData.armour, "%");
 
     // Mic
-    if (retData.talking) {
+    if (retData.micActive) {
       micStatus.style.color = "cyan";
-    } else if (!retData.talking) {
+    } else if (!retData.micActive) {
       micStatus.style.color = "white";
     }
 
