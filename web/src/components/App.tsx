@@ -15,6 +15,10 @@ debugData([
 ]);
 
 const App: React.FC = () => {
+  const [visible, setVisible] = useState(false);
+  const [vehHud, setVehVisiblity] = useState(false);
+  useNuiEvent("setVisible", setVisible);
+  useNuiEvent("setVehV", setVehVisiblity);
   useNuiEvent("hudStats", (retData) => {
     const userHealth = document.getElementById(
       "user-health"
@@ -66,7 +70,10 @@ const App: React.FC = () => {
   return (
     <>
       {/* Hud */}
-      <div className="ui">
+      <div
+        className="ui"
+        style={{ visibility: visible ? "visible" : "hidden" }}
+      >
         <div className="health">
           <div className="flex gap-2 justify-center align-center mt-4 text-center">
             <p className="font-bold bg-black p-2 rounded wid">
@@ -85,7 +92,10 @@ const App: React.FC = () => {
       </div>
 
       {/* CarHud */}
-      <div className="centerig">
+      <div
+        className="centerig"
+        style={{ visibility: vehHud ? "visible" : "hidden" }}
+      >
         <div className="grid grid-cols-2 gap-2 text-center">
           <p className="font-bold bg-black p-2 rounded">
             <i className="fa-solid fa-car text-purple-500"></i>{" "}

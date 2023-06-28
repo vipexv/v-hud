@@ -23,7 +23,7 @@ export const VisibilityProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [visible, setVisible] = useState(false);
 
-  useNuiEvent<boolean>("setVisible", setVisible);
+  // useNuiEvent<boolean>("setVisible", setVisible);
 
   // Handle pressing escape/backspace
   useEffect(() => {

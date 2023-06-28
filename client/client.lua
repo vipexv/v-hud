@@ -3,6 +3,13 @@ local function toggleNuiFrame(shouldShow)
   SendReactMessage('setVisible', shouldShow)
 end
 
+
+local function toggleVehHudFrame(shouldShow)
+  -- SetNuiFocus(shouldShow, shouldShow)
+  SendReactMessage('setVehV', shouldShow)
+end
+
+
 loaded = false
 
 local function loadHud()
@@ -26,7 +33,6 @@ local function loadHud()
           oldHealth = hp
           oldArmour = armour
           oldState = talking
-          print(playerStats.hp)
           -- print("Updated Hud!")
           -- print(oldHealth)
       end
@@ -46,18 +52,20 @@ local function loadCarHud()
         local gear = GetVehicleCurrentGear(vehicle)
         local fuel = GetVehicleFuelLevel(vehicle)
         local speed = GetEntitySpeed(vehicle) * 2.237 --Feel free to edit this if needed to switch to KMH, currently using MPH.
-        toggleNuiFrame(true)
+        -- toggleNuiFrame(true)
+        toggleVehHudFrame(true)
         local vehStats = {
           gear = gear,
           fuel = fuel,
           speed = speed,
         }
         SendReactMessage("vehHud", vehStats)
+      else
+        toggleVehHudFrame(false)
       end
     end
   end)
 end
-
 
 -- QB-Multicharacter Fix.
 
