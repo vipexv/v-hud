@@ -6,7 +6,10 @@ author 'Discord: vipex.v'
 ui_page 'web/build/index.html'
 
 shared_script "shared/config.lua"
-client_script "client/**/*"
+client_scripts {
+	"client/utils.lua",
+	"client/client.lua"
+}
 -- server_script "server/**/*"
 
 files {

@@ -29,10 +29,18 @@ body {
 .centerig {
   position: absolute;
   top: 95.5%;
-  left: 92%;
+  left: 89%;
   transform: translate(-50%, -50%);
   height: fit-content;
-  width: 13vw;
+  width: 20vw;
+  text-align: center;
+}
+
+.id {
+  position: absolute;
+  top: 98%;
+  left: 97%;
+  transform: translate(-50%, -50%);
 }
 
 .misc {

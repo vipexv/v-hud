@@ -1,15 +1,22 @@
+
+  -- Config Stuff
   if Config.QBCore then
       QBCore = exports["qb-core"]:GetCoreObject()
   end
-
-  -- PlayerData = QBCore.Functions.GetPlayerData()
-
+  if Config.MenuOptions.ID then
+    Wait(2000)
+    SendReactMessage("id", true)
+  end
+  if Config.Seatbelt then
+    Wait(2000)
+    SendReactMessage("seatbelt", true)
+  end
 local function toggleNuiFrame(shouldShow)
   -- SetNuiFocus(shouldShow, shouldShow)
   SendReactMessage('setVisible', shouldShow)
+  SendReactMessage("setUserId", GetPlayerServerId(PlayerId()))
   if Config.QBCore or Config.ESX then
       SendReactMessage('framework', true)
-      print("done")
   end
 end
 
@@ -18,8 +25,19 @@ local function toggleVehHudFrame(shouldShow)
   SendReactMessage('setVehV', shouldShow)
 end
 
-
+showSeatbelt = false
+seatbeltOn = false
 loaded = false
+
+
+RegisterNetEvent('hud:client:ToggleShowSeatbelt', function()
+    showSeatbelt = not showSeatbelt
+end)
+
+RegisterNetEvent('seatbelt:client:ToggleSeatbelt', function() -- Triggered in smallresources
+    seatbeltOn = not seatbeltOn
+end)
+
 
 
 local function loadHud()
@@ -66,7 +84,7 @@ local function loadCarHud()
         local vehicle = GetVehiclePedIsIn(ped, false)
         local gear = GetVehicleCurrentGear(vehicle)
         local fuel = GetVehicleFuelLevel(vehicle)
-        local speedVal = GetEntitySpeed(vehicle) * 2.237 --Feel free to edit this if needed to switch to KMH, currently using MPH.
+        local speedVal = GetEntitySpeed(vehicle) * 2.237 --Feel free to edit this if needed to switch to KMH, currently using MPH. it's 3.6 for KMH.
         local speed = math.floor(speedVal)
         -- toggleNuiFrame(true)
         toggleVehHudFrame(true)
@@ -74,6 +92,7 @@ local function loadCarHud()
           gear = gear,
           fuel = fuel,
           speed = speed,
+          seatbeltOn = seatbeltOn,
         }
         SendReactMessage("vehHud", vehStats)
       else
@@ -84,7 +103,7 @@ local function loadCarHud()
 end
 
 
-local function loadHudQB()
+local function loadHudMisc()
   CreateThread(function()
     local oldHunger = nil
     local oldThirst = nil
@@ -133,7 +152,7 @@ if Config.QBCore then
     loaded = true
     loadHud()
     loadCarHud()
-    loadHudQB()
+    loadHudMisc()
     QBCore.Functions.Notify("Hud Loaded!", 'success', 1000)
     print("Loaded Hud!")
   end)
@@ -149,5 +168,5 @@ if Config.QBCore then
     loaded = true
     loadHud()
     loadCarHud()
-    loadHudQB()
+    loadHudMisc()
   end)
