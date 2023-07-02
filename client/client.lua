@@ -11,6 +11,11 @@
     Wait(2000)
     SendReactMessage("seatbelt", true)
   end
+  if Config.MenuOptions.Stress then
+    Wait(2000)
+    SendReactMessage("stress", true)
+  end
+
 local function toggleNuiFrame(shouldShow)
   -- SetNuiFocus(shouldShow, shouldShow)
   SendReactMessage('setVisible', shouldShow)
@@ -73,6 +78,20 @@ local function loadHud()
   end)
 end
 
+local function escapeMenuLoop()
+  CreateThread(function()
+      while loaded do
+        local menuActive = IsPauseMenuActive()
+        if menuActive then
+          toggleNuiFrame(false)
+        else
+          toggleNuiFrame(true)
+        end
+        Wait(1000)
+      end
+  end)
+end
+
 
 local function loadCarHud()
   CreateThread(function()
@@ -83,7 +102,7 @@ local function loadCarHud()
       if isInVeh then 
         local vehicle = GetVehiclePedIsIn(ped, false)
         local gear = GetVehicleCurrentGear(vehicle)
-        local fuel = GetVehicleFuelLevel(vehicle)
+        local fuel = math.floor(GetVehicleFuelLevel(vehicle))
         local speedVal = GetEntitySpeed(vehicle) * 2.237 --Feel free to edit this if needed to switch to KMH, currently using MPH. it's 3.6 for KMH.
         local speed = math.floor(speedVal)
         -- toggleNuiFrame(true)
@@ -107,19 +126,23 @@ local function loadHudMisc()
   CreateThread(function()
     local oldHunger = nil
     local oldThirst = nil
+    local oldStress = nil
     while loaded do
         local PlayerData = QBCore.Functions.GetPlayerData()
         local hunger = math.floor(PlayerData.metadata['hunger'])
         local thirst = math.floor(PlayerData.metadata['thirst'])
+        local stress = math.floor(PlayerData.metadata['stress'])
         local qbData = {
           hunger = hunger,
-          thirst = thirst
+          thirst = thirst,
+          stress = stress
         }
-        if oldHunger ~= hunger or oldThirst ~= thirst then
+        if oldHunger ~= hunger or oldThirst ~= thirst or oldStress ~= stress then
         SendReactMessage("frameworkStatus", qbData)
         -- print(qbData.hunger)
         oldHunger = hunger
         oldThirst = thirst
+        oldStress = stress
         end
       Wait(1000)
     end
@@ -153,6 +176,9 @@ if Config.QBCore then
     loadHud()
     loadCarHud()
     loadHudMisc()
+    if Config.EscapeMenuLoop then
+      escapeMenuLoop()
+    end
     QBCore.Functions.Notify("Hud Loaded!", 'success', 1000)
     print("Loaded Hud!")
   end)
@@ -162,6 +188,9 @@ if Config.QBCore then
     loaded = true
     loadHud()
     loadCarHud()
+    if Config.EscapeMenuLoop then
+      escapeMenuLoop()
+    end
   end
 
   RegisterCommand("reloadHud", function()

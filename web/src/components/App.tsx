@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./App.css";
 import { debugData } from "../utils/debugData";
-// import { fetchNui } from "../utils/fetchNui";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { animateNumber } from "../utils/animateNumber";
+import { CircularProgressbarWithChildren } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 debugData([
   {
@@ -12,20 +13,45 @@ debugData([
   },
 ]);
 
+type UserStats = {
+  hp: number;
+  armour: number;
+  micActive: boolean;
+};
+
+type VehicleStats = {
+  speed: number;
+  gear: number;
+  fuel: number;
+  seatbeltOn: boolean;
+};
+
+type frameworkStats = {
+  hunger: number;
+  thirst: number;
+  stress: number;
+};
+
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [vehHud, setVehVisiblity] = useState(false);
   const [framework, setframework] = useState(false);
   const [id, setid] = useState(false);
   const [seatbelt, setSeatbelt] = useState(false);
+  const [stress, setStress] = useState(false);
+  const [stressValue, setStressValue] = useState<number>(0);
   const [userId, setUserId] = useState("");
+
+  // Options
   useNuiEvent("setVisible", setVisible);
   useNuiEvent("framework", setframework);
   useNuiEvent("id", setid);
+  useNuiEvent("stress", setStress);
   useNuiEvent("seatbelt", setSeatbelt);
   useNuiEvent("setUserId", setUserId);
   useNuiEvent("setVehV", setVehVisiblity);
-  useNuiEvent("hudStats", (retData) => {
+
+  useNuiEvent<UserStats>("hudStats", (retData) => {
     const userHealth = document.getElementById(
       "user-health"
     ) as HTMLSpanElement;
@@ -51,7 +77,7 @@ const App: React.FC = () => {
     console.log(JSON.stringify(retData));
   });
 
-  useNuiEvent("vehHud", (retData) => {
+  useNuiEvent<VehicleStats>("vehHud", (retData) => {
     const mph = document.getElementById("mph") as HTMLSpanElement;
     const gear = document.getElementById("gear") as HTMLSpanElement;
     const fuel = document.getElementById("fuel") as HTMLSpanElement;
@@ -59,11 +85,9 @@ const App: React.FC = () => {
     console.log(JSON.stringify(retData));
 
     if (seatbelt && retData.seatbeltOn) {
-      seatBelt.style.color = "white";
-      seatBelt.classList.replace("fa-user-slash", "fa-user");
+      seatBelt.style.color = "green";
     } else if (seatbelt && !retData.seatbeltOn) {
       seatBelt.style.color = "red";
-      seatBelt.classList.replace("fa-user", "fa-user-slash");
     }
     // MPH Text
     // mph.textContent = ` ${speed} MP/H`;
@@ -76,13 +100,17 @@ const App: React.FC = () => {
     animateNumber(fuel, retData.fuel, "%");
   });
 
-  useNuiEvent("frameworkStatus", (data) => {
+  useNuiEvent<frameworkStats>("frameworkStatus", (data) => {
     const userHunger = document.getElementById(
       "user-hunger"
     ) as HTMLSpanElement;
     const userThirst = document.getElementById(
       "user-thirst"
     ) as HTMLSpanElement;
+    const userStress = document.getElementById("user-stress") as HTMLLIElement;
+
+    // animateNumber(userStress, data.stress, "%");
+    setStressValue(data.stress);
 
     animateNumber(userHunger, data.hunger, "%");
 
@@ -109,9 +137,29 @@ const App: React.FC = () => {
               <i className="fa-solid fa-burger text-yellow-500"></i>{" "}
               <span id="user-hunger"> 100%</span>
             </p>
-            <p className="font-bold bg-black p-2 rounded w-10">
+            <p className="font-bold bg-black p-2 rounded-full w-10">
               <i className="fa-solid fa-microphone mt-1" id="mic"></i>
             </p>
+            {stress && (
+              <>
+                <div className="w-10 bg-black rounded-full">
+                  <CircularProgressbarWithChildren
+                    value={stressValue}
+                    styles={{
+                      path: {
+                        stroke: `red`,
+                      },
+                      trail: {
+                        stroke: "black",
+                        strokeLinecap: "round",
+                      },
+                    }}
+                  >
+                    <i className="fa-solid fa-brain"></i>
+                  </CircularProgressbarWithChildren>
+                </div>
+              </>
+            )}
             <p
               className="font-bold bg-black p-2 rounded wid"
               style={{ display: framework ? "block" : "none" }}
@@ -169,8 +217,7 @@ const App: React.FC = () => {
           )}
         </div>
       </div>
-
-      {/* Id Without CarHud */}
+      {/* ID Without CarHud */}
       {id && !vehHud && (
         <div className="id w-24 text-center">
           <p className="font-bold bg-black p-2 rounded smallIcons">

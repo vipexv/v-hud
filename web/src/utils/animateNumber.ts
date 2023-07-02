@@ -5,7 +5,7 @@ export const animateNumber = (element: any, newValue: any, symbol = "") => {
     return;
   }
 
-  const duration = 1000; // Animation duration in milliseconds
+  const duration = 500;
   const start = performance.now();
 
   requestAnimationFrame(function animate(currentTime) {
