@@ -14,6 +14,5 @@ Without Hunger/Thirst (Standalone)
 ![249425003-1f7ce2e5-c120-4b43-a295-67d8433ebd2c](https://github.com/vipexv/v-hud/assets/101529155/1564d933-975b-4e0d-bb5b-059a2ec33c41)
 
 
-With Hunger/Thirst (QB-ESX)
-
-![image](https://github.com/vipexv/v-hud/assets/101529155/2ac60baf-57ef-47df-ab0a-52e7e1cb72f3)
+With Every Configurable option enabled. (QB-ESX)
+![image](https://github.com/vipexv/v-hud/assets/101529155/ed52f72d-6ab4-4fb9-9abf-066abacf5a65)
