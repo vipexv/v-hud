@@ -32,6 +32,12 @@ type frameworkStats = {
   stress: number;
 };
 
+type balance = {
+  cash: number;
+  bank: number;
+  dirty_cash: number;
+};
+
 const App: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [vehHud, setVehVisiblity] = useState(false);
@@ -41,6 +47,9 @@ const App: React.FC = () => {
   const [stress, setStress] = useState(false);
   const [stressValue, setStressValue] = useState<number>(0);
   const [userId, setUserId] = useState("");
+  const [cash, setCash] = useState(0);
+  const [bank, setBank] = useState(0);
+  const [dirtyCash, setDirtyCash] = useState(0);
 
   // Options
   useNuiEvent("setVisible", setVisible);

@@ -1,4 +1,3 @@
-
   -- Config Stuff
   if Config.QBCore then
       QBCore = exports["qb-core"]:GetCoreObject()
@@ -20,7 +19,7 @@ local function toggleNuiFrame(shouldShow)
   -- SetNuiFocus(shouldShow, shouldShow)
   SendReactMessage('setVisible', shouldShow)
   SendReactMessage("setUserId", GetPlayerServerId(PlayerId()))
-  if Config.QBCore or Config.ESX then
+  if Config.QBCore or Config.ESX or Config.vRP then
       SendReactMessage('framework', true)
   end
 end
@@ -164,6 +163,27 @@ if Config.ESX then
         }
         SendReactMessage("frameworkStatus", esxStatus)
     end)
+end
+
+---------------- vRP -----------------
+if Config.vRP then
+  loaded = true
+  
+  CreateThread(function()
+    while true do
+      TriggerServerEvent("vrp_version:v-hud:GetStatus")
+      Wait(1500)
+    end
+  end)
+
+  RegisterNetEvent("vrp_version:v-hud:GetStatus:return")
+  AddEventHandler("vrp_version:v-hud:GetStatus:return", function(stats)
+    vRPStatus = {
+      hunger = math.floor(100 - stats.hunger),
+      thirst = math.floor(100 - stats.thirst)
+    }
+    SendReactMessage("frameworkStatus", vRPStatus)
+  end)
 end
 
 -- QB-Multicharacter Fix.

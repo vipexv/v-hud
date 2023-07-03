@@ -10,6 +10,11 @@ client_scripts {
 	"client/utils.lua",
 	"client/client.lua"
 }
+
+server_scripts {
+	-- "@vrp/lib/utils.lua", -- Enable if you are using vRP
+	"server/main.lua"
+}
 -- server_script "server/**/*"
 
 files {
