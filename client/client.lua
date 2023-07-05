@@ -242,19 +242,19 @@ local function loadUserInfo()
         for k, v in pairs(xPlayer.accounts) do
           if v.name == "money" then
             data.cash = v.money
-            -- print("Table Cash: [$"..data.cash.. "] Pairs Cash: [$" ..v.money.. "]")
+            -- print("Debug Stuff: [$"..data.cash.. "] Debug Stuff 2: [$" ..v.money.. "]")
           elseif v.name == "bank" then
             data.bank = v.money
+            -- print("Debug Stuff: [$"..data.cash.. "] Debug Stuff 2: [$" ..v.money.. "]")
           elseif v.name == "black_money" then
             data.dirty_cash = v.money
+            -- print("Debug Stuff: [$"..data.cash.. "] Debug Stuff 2: [$" ..v.money.. "]")
           end
           Wait(1000)
         end
 
-        -- Assign the job data
         data.job = player_job
 
-        -- Check if the data has changed
         local dataChanged = false
         if data.cash ~= oldCash or data.bank ~= oldBank or data.dirty_cash ~= oldDirty or data.job ~= oldJob then
           dataChanged = true
