@@ -198,9 +198,6 @@ local function loadUserInfo()
   local oldDirtyCash = nil
   local oldJob = nil
   if Config.QBCore and Config.DisplayUserInfo then
-    RegisterNetEvent("returnUserData", function(data) 
-      print(data)
-    end)
     CreateThread(function()
       while loaded do
       local Player = QBCore.Functions.GetPlayerData()
