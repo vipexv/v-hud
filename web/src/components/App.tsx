@@ -32,10 +32,12 @@ type frameworkStats = {
   stress: number;
 };
 
-type balance = {
+type userInfo = {
   cash: number;
   bank: number;
   dirty_cash: number;
+  job: string;
+  player_data: any;
 };
 
 const App: React.FC = () => {
@@ -45,11 +47,14 @@ const App: React.FC = () => {
   const [id, setid] = useState(false);
   const [seatbelt, setSeatbelt] = useState(false);
   const [stress, setStress] = useState(false);
-  const [stressValue, setStressValue] = useState<number>(0);
-  const [userId, setUserId] = useState("");
+  const [displayBalance, setDisplayBalance] = useState(false);
+  const [stressValue, setStressValue] = useState(0);
+  const [micActive, setMicActive] = useState(0);
   const [cash, setCash] = useState(0);
   const [bank, setBank] = useState(0);
-  const [dirtyCash, setDirtyCash] = useState(0);
+  const [dirtyCash, setDirtyCash] = useState<any>(null);
+  const [user_job, setUserJob] = useState("Job");
+  const [userId, setUserId] = useState("");
 
   // Options
   useNuiEvent("setVisible", setVisible);
@@ -58,7 +63,13 @@ const App: React.FC = () => {
   useNuiEvent("stress", setStress);
   useNuiEvent("seatbelt", setSeatbelt);
   useNuiEvent("setUserId", setUserId);
+  useNuiEvent("displayBalance", setDisplayBalance);
   useNuiEvent("setVehV", setVehVisiblity);
+
+  // Debug
+  useNuiEvent("debug", (data) => {
+    console.log(JSON.stringify(data));
+  });
 
   useNuiEvent<UserStats>("hudStats", (retData) => {
     const userHealth = document.getElementById(
@@ -77,13 +88,10 @@ const App: React.FC = () => {
 
     // Mic
     if (retData.micActive) {
-      micStatus.style.color = "cyan";
+      setMicActive(100);
     } else if (!retData.micActive) {
-      micStatus.style.color = "white";
+      setMicActive(0);
     }
-
-    // Debug
-    console.log(JSON.stringify(retData));
   });
 
   useNuiEvent<VehicleStats>("vehHud", (retData) => {
@@ -91,7 +99,6 @@ const App: React.FC = () => {
     const gear = document.getElementById("gear") as HTMLSpanElement;
     const fuel = document.getElementById("fuel") as HTMLSpanElement;
     const seatBelt = document.getElementById("seatbelt") as HTMLLIElement;
-    console.log(JSON.stringify(retData));
 
     if (seatbelt && retData.seatbeltOn) {
       seatBelt.style.color = "green";
@@ -116,7 +123,6 @@ const App: React.FC = () => {
     const userThirst = document.getElementById(
       "user-thirst"
     ) as HTMLSpanElement;
-    const userStress = document.getElementById("user-stress") as HTMLLIElement;
 
     // animateNumber(userStress, data.stress, "%");
     setStressValue(data.stress);
@@ -126,9 +132,53 @@ const App: React.FC = () => {
     animateNumber(userThirst, data.thirst, "%");
   });
 
+  useNuiEvent<userInfo>("userInfo", (data) => {
+    setCash(data.cash);
+    setBank(data.bank);
+    if (data.dirty_cash) {
+      setDirtyCash(data.dirty_cash);
+    }
+    setUserJob(data.job);
+  });
+
   return (
     <>
       {/* Hud */}
+      {displayBalance && (
+        <div
+          className="flex items-end border-black align-top flex-col gap-2 text-center mt-10 uppercase"
+          style={{ visibility: visible ? "visible" : "hidden" }}
+        >
+          <p className="p-2 bg-black rounded font-bold mr-5 w-64">
+            <i className="fa-solid fa-money-check-dollar text-green-500"></i>{" "}
+            <span className="ml-2" id="cash">
+              ${cash}
+            </span>
+          </p>
+          <p className="p-2 bg-black rounded font-bold mr-5 w-64">
+            <i className="fa-solid fa-credit-card text-blue-500"></i>
+            <span className="ml-2" id="bank">
+              ${bank}
+            </span>
+          </p>
+          {dirtyCash && (
+            <>
+              <p className="p-2 bg-black rounded font-bold mr-5 w-64">
+                <i className="fa-solid fa-money-bill text-red-600"></i>
+                <span className="ml-2" id="black_cash">
+                  ${dirtyCash}
+                </span>
+              </p>
+            </>
+          )}
+          <p className="p-2 bg-black rounded font-bold mr-5 w-64">
+            <i className="fa-solid fa-user"></i>
+            <span className="ml-2" id="job">
+              {user_job}
+            </span>
+          </p>
+        </div>
+      )}
       <div
         className="ui"
         style={{ visibility: visible ? "visible" : "hidden" }}
@@ -146,9 +196,22 @@ const App: React.FC = () => {
               <i className="fa-solid fa-burger text-yellow-500"></i>{" "}
               <span id="user-hunger"> 100%</span>
             </p>
-            <p className="font-bold bg-black p-2 rounded-full w-10">
-              <i className="fa-solid fa-microphone mt-1" id="mic"></i>
-            </p>
+            <div className="w-10 bg-black rounded-full">
+              <CircularProgressbarWithChildren
+                value={micActive}
+                styles={{
+                  path: {
+                    stroke: `cyan`,
+                  },
+                  trail: {
+                    stroke: "black",
+                    strokeLinecap: "round",
+                  },
+                }}
+              >
+                <i className="fa-solid fa-microphone" id="mic"></i>
+              </CircularProgressbarWithChildren>
+            </div>
             {stress && (
               <>
                 <div className="w-10 bg-black rounded-full">
@@ -187,7 +250,7 @@ const App: React.FC = () => {
       {/* CarHud */}
       <div
         className="centerig"
-        style={{ visibility: vehHud ? "visible" : "hidden" }}
+        style={{ visibility: vehHud && visible ? "visible" : "hidden" }}
       >
         <div
           className={`grid ${
@@ -204,7 +267,7 @@ const App: React.FC = () => {
           </p>
           {id && (
             <p className="font-bold bg-black p-2 rounded smallIcons">
-              <i className="fa-solid fa-user"></i>
+              <i className="fa-solid fa-id-badge"></i>
               <span id="userId"> ID: {userId}</span>
             </p>
           )}
@@ -228,9 +291,12 @@ const App: React.FC = () => {
       </div>
       {/* ID Without CarHud */}
       {id && !vehHud && (
-        <div className="id w-24 text-center">
+        <div
+          className="id w-24 text-center"
+          style={{ visibility: visible ? "visible" : "hidden" }}
+        >
           <p className="font-bold bg-black p-2 rounded smallIcons">
-            <i className="fa-solid fa-user"></i>
+            <i className="fa-solid fa-id-badge"></i>
             <span id="userId"> ID: {userId}</span>
           </p>
         </div>

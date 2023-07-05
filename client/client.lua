@@ -2,6 +2,9 @@
   if Config.QBCore then
       QBCore = exports["qb-core"]:GetCoreObject()
   end
+  if Config.ESX then
+    ESX = exports['es_extended']:getSharedObject() 
+  end
   if Config.MenuOptions.ID then
     Wait(2000)
     SendReactMessage("id", true)
@@ -13,6 +16,10 @@
   if Config.MenuOptions.Stress then
     Wait(2000)
     SendReactMessage("stress", true)
+  end
+  if Config.DisplayUserInfo then
+    Wait(2000)
+    SendReactMessage("displayBalance", true)
   end
 
 local function toggleNuiFrame(shouldShow)
@@ -41,8 +48,6 @@ end)
 RegisterNetEvent('seatbelt:client:ToggleSeatbelt', function() -- Triggered in smallresources
     seatbeltOn = not seatbeltOn
 end)
-
-
 
 local function loadHud()
   toggleNuiFrame(true)
@@ -186,6 +191,92 @@ if Config.vRP then
   end)
 end
 
+-- User Info
+local function loadUserInfo()
+  local oldCash = nil
+  local oldBank = nil
+  local oldDirtyCash = nil
+  local oldJob = nil
+  if Config.QBCore and Config.DisplayUserInfo then
+    RegisterNetEvent("returnUserData", function(data) 
+      print(data)
+    end)
+    CreateThread(function()
+      while loaded do
+      local Player = QBCore.Functions.GetPlayerData()
+      local cash = Player.money["cash"]
+      local bank = Player.money["bank"]
+      local jobName = Player.job.name or 'unemployed'
+      local jobLabel = Player.job.grade.name or 'Civilian'
+      local job = jobName.. " - " ..jobLabel
+      local dataChanged = false
+      
+      -- I should just loop through these if i decide to add more stats lmfao.
+      if cash ~= oldCash or bank ~= oldBank or dirty_cash ~= oldDirtyCash or job ~= oldJob then
+        dataChanged = true
+      end
+
+      if dataChanged then
+        local data = {
+          cash = cash,
+          bank = bank,
+          job = job,
+        }
+        oldCash = cash
+        oldBank = bank
+        oldDirtyCash = dirty_cash
+        oldJob = job
+        SendReactMessage("userInfo", data)
+      end
+      Wait(1000)
+      end
+    end)
+  elseif Config.ESX and Config.DisplayUserInfo then
+    CreateThread(function()
+      local oldCash = nil
+      local oldBank = nil
+      local oldDirty = nil
+      local oldJob = nil
+      while loaded do
+        local xPlayer = ESX.GetPlayerData()
+        local player_job = string.format("%s - %s", ESX.PlayerData.job.label, ESX.PlayerData.job.grade_label)
+        local data = {}
+
+        for k, v in pairs(xPlayer.accounts) do
+          if v.name == "money" then
+            data.cash = v.money
+            -- print("Table Cash: [$"..data.cash.. "] Pairs Cash: [$" ..v.money.. "]")
+          elseif v.name == "bank" then
+            data.bank = v.money
+          elseif v.name == "black_money" then
+            data.dirty_cash = v.money
+          end
+          Wait(1000)
+        end
+
+        -- Assign the job data
+        data.job = player_job
+
+        -- Check if the data has changed
+        local dataChanged = false
+        if data.cash ~= oldCash or data.bank ~= oldBank or data.dirty_cash ~= oldDirty or data.job ~= oldJob then
+          dataChanged = true
+        end
+
+        if dataChanged then
+          oldCash = data.cash
+          oldBank = data.bank
+          oldDirty = data.dirty_cash
+          oldJob = data.job
+          SendReactMessage("userInfo", data)
+        end
+        print(data.dirty_cash)
+        Wait(1000)
+      end
+    end)
+  end
+end
+
 -- QB-Multicharacter Fix.
 
 if Config.QBCore then
@@ -199,6 +290,7 @@ if Config.QBCore then
     if Config.EscapeMenuLoop then
       escapeMenuLoop()
     end
+    loadUserInfo()
     QBCore.Functions.Notify("Hud Loaded!", 'success', 1000)
     print("Loaded Hud!")
   end)
@@ -208,14 +300,17 @@ if Config.QBCore then
     loaded = true
     loadHud()
     loadCarHud()
+    loadUserInfo()
     if Config.EscapeMenuLoop then
       escapeMenuLoop()
     end
   end
+
 
   RegisterCommand("reloadHud", function()
     loaded = true
     loadHud()
     loadCarHud()
     loadHudMisc()
+    loadUserInfo()
   end)
