@@ -7,33 +7,33 @@
   end
   if Config.MenuOptions.ID then
     Wait(2000)
-    SendReactMessage("id", true)
+    UIMessage("id", true)
   end
   if Config.Seatbelt then
     Wait(2000)
-    SendReactMessage("seatbelt", true)
+    UIMessage("seatbelt", true)
   end
   if Config.MenuOptions.Stress then
     Wait(2000)
-    SendReactMessage("stress", true)
+    UIMessage("stress", true)
   end
   if Config.DisplayUserInfo then
     Wait(2000)
-    SendReactMessage("displayBalance", true)
+    UIMessage("displayBalance", true)
   end
 
 local function toggleNuiFrame(shouldShow)
   -- SetNuiFocus(shouldShow, shouldShow)
-  SendReactMessage('setVisible', shouldShow)
-  SendReactMessage("setUserId", GetPlayerServerId(PlayerId()))
+  UIMessage('setVisible', shouldShow)
+  UIMessage("setUserId", GetPlayerServerId(PlayerId()))
   if Config.QBCore or Config.ESX or Config.vRP then
-      SendReactMessage('framework', true)
+      UIMessage('framework', true)
   end
 end
 
 local function toggleVehHudFrame(shouldShow)
   -- SetNuiFocus(shouldShow, shouldShow)
-  SendReactMessage('setVehV', shouldShow)
+  UIMessage('setVehV', shouldShow)
 end
 
 showSeatbelt = false
@@ -72,7 +72,7 @@ local function loadHud()
           armour = armour,
           micActive = talking,
         }
-        SendReactMessage("hudStats", playerStats)
+        UIMessage("hudStats", playerStats)
         oldHealth = hp
         oldArmour = armour
         oldState = talking
@@ -117,7 +117,7 @@ local function loadCarHud()
           speed = speed,
           seatbeltOn = seatbeltOn,
         }
-        SendReactMessage("vehHud", vehStats)
+        UIMessage("vehHud", vehStats)
       else
         toggleVehHudFrame(false)
       end
@@ -142,7 +142,7 @@ local function loadHudMisc()
           stress = stress
         }
         if oldHunger ~= hunger or oldThirst ~= thirst or oldStress ~= stress then
-        SendReactMessage("frameworkStatus", qbData)
+        UIMessage("frameworkStatus", qbData)
         -- print(qbData.hunger)
         oldHunger = hunger
         oldThirst = thirst
@@ -166,7 +166,7 @@ if Config.ESX then
           hunger = hunger,
           thirst = thirst
         }
-        SendReactMessage("frameworkStatus", esxStatus)
+        UIMessage("frameworkStatus", esxStatus)
     end)
 end
 
@@ -187,7 +187,7 @@ if Config.vRP then
       hunger = math.floor(100 - stats.hunger),
       thirst = math.floor(100 - stats.thirst)
     }
-    SendReactMessage("frameworkStatus", vRPStatus)
+    UIMessage("frameworkStatus", vRPStatus)
   end)
 end
 
@@ -223,7 +223,7 @@ local function loadUserInfo()
         oldBank = bank
         oldDirtyCash = dirty_cash
         oldJob = job
-        SendReactMessage("userInfo", data)
+        UIMessage("userInfo", data)
       end
       Wait(1000)
       end
@@ -265,7 +265,7 @@ local function loadUserInfo()
           oldBank = data.bank
           oldDirty = data.dirty_cash
           oldJob = data.job
-          SendReactMessage("userInfo", data)
+          UIMessage("userInfo", data)
         end
         print(data.dirty_cash)
         Wait(1000)
