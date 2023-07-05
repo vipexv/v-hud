@@ -4,7 +4,7 @@ Config = {
   vRP = false, -- Same thing as the other ones, vRP part was fully made by Taco.
   Seatbelt = false, --  (QB Only for now) Enables the seatbelt which will lead to more resource usage!
   EscapeMenuLoop = true, -- (Standalone) Enable this to make the menu disappear when the user is in the Pause Menu, but this increases the resmon usage on the script due to the new loop, up to you.
-  DisplayUserInfo = false, -- (QB/ESX) Display the user information, Job, Cash, Bank.
+  DisplayUserInfo = false, -- (QB/ESX) Display the user information, Job, Cash, Bank and Dirty Money for ESX.
 
   MenuOptions = {
     ID = true, -- (Standalone) Enable to display the players ID in the HUD.
