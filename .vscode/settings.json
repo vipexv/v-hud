@@ -1,0 +1,12 @@
+{
+  "Lua.diagnostics.globals": [
+    "RegisterNetEvent",
+    "Wait",
+    "exports",
+    "RegisterCommand",
+    "debugPrint"
+  ],
+  "Lua.diagnostics.disable": [
+    "deprecated"
+  ]
+}

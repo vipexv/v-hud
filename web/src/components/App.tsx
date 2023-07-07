@@ -3,8 +3,6 @@ import "./App.css";
 import { debugData } from "../utils/debugData";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { animateNumber } from "../utils/animateNumber";
-import { CircularProgressbarWithChildren } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
 
 debugData([
   {
@@ -37,7 +35,6 @@ type userInfo = {
   bank: number;
   dirty_cash: number;
   job: string;
-  player_data: any;
 };
 
 const App: React.FC = () => {
@@ -68,7 +65,7 @@ const App: React.FC = () => {
 
   // Debug
   useNuiEvent("debug", (data) => {
-    console.log(JSON.stringify(data));
+    debugData(data, 500);
   });
 
   useNuiEvent<UserStats>("hudStats", (retData) => {
@@ -196,39 +193,29 @@ const App: React.FC = () => {
               <i className="fa-solid fa-burger text-yellow-500"></i>{" "}
               <span id="user-hunger"> 100%</span>
             </p>
-            <div className="w-10 bg-black rounded-full">
-              <CircularProgressbarWithChildren
-                value={micActive}
-                styles={{
-                  path: {
-                    stroke: `cyan`,
-                  },
-                  trail: {
-                    stroke: "black",
-                    strokeLinecap: "round",
-                  },
+            <div className="flex flex-col gap-1 justify-center items-center w-10 bg-black rounded">
+              <i className="fa-solid fa-microphone mt-1" id="mic"></i>
+              <div
+                className="text-center bg-cyan-400 max-h-1 h-1/3 rounded"
+                style={{
+                  maxWidth: "2rem",
+                  width: `${micActive}%`,
+                  transition: "width 0.3s ease-in-out",
                 }}
-              >
-                <i className="fa-solid fa-microphone" id="mic"></i>
-              </CircularProgressbarWithChildren>
+              ></div>
             </div>
             {stress && (
               <>
-                <div className="w-10 bg-black rounded-full">
-                  <CircularProgressbarWithChildren
-                    value={stressValue}
-                    styles={{
-                      path: {
-                        stroke: `red`,
-                      },
-                      trail: {
-                        stroke: "black",
-                        strokeLinecap: "round",
-                      },
+                <div className="flex flex-col gap-1 justify-center transition items-center w-10 bg-black rounded">
+                  <i className="fa-solid fa-brain mt-1" id="mic"></i>
+                  <div
+                    className="text-center bg-red-600 transition max-h-1 h-1/3 rounded"
+                    style={{
+                      maxWidth: "2rem",
+                      width: `${stressValue}%`,
+                      transition: "width 0.3s ease-in-out",
                     }}
-                  >
-                    <i className="fa-solid fa-brain"></i>
-                  </CircularProgressbarWithChildren>
+                  ></div>
                 </div>
               </>
             )}

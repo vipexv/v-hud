@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-doc-param
 ---@param action string The action you wish to target
 ---@param data any The data you wish to send along with this action
 
@@ -11,6 +12,7 @@ end
 local currentResourceName = GetCurrentResourceName()
 
 local debugIsEnabled = GetConvarInt(('%s-debugMode'):format(currentResourceName), 0) == 1
+
 
 function debugPrint(...)
   if not debugIsEnabled then return end
