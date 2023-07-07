@@ -11,7 +11,7 @@ Notice: Bugs are 100% expected, this is still in development, please go ahead an
 
 
 Preview V1.4: 
-* ![image](https://github.com/vipexv/v-hud/assets/101529155/95247b58-d5a1-4e9c-8a5a-3c78cccf35bc)
+* ![image](https://github.com/vipexv/v-hud/assets/101529155/5b3f39a1-6573-41f9-b63d-a55bba5b079d)
 
 Config V1.4:
 
