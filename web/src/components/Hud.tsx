@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./App.css";
+import { useState } from "react";
+import "./Hud.css";
 import { debugData } from "../utils/debugData";
 import { useNuiEvent } from "../hooks/useNuiEvent";
 import { animateNumber } from "../utils/animateNumber";
@@ -37,7 +37,7 @@ type userInfo = {
   job: string;
 };
 
-const App: React.FC = () => {
+const Hud: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [vehHud, setVehVisiblity] = useState(false);
   const [framework, setframework] = useState(false);
@@ -209,7 +209,7 @@ const App: React.FC = () => {
                 <div className="flex flex-col gap-1 justify-center transition items-center w-10 bg-black rounded">
                   <i className="fa-solid fa-brain mt-1" id="mic"></i>
                   <div
-                    className="text-center bg-red-600 transition max-h-1 h-1/3 rounded"
+                    className="text-center bg-red-600 transition max-h-1 h-1/3"
                     style={{
                       maxWidth: "2rem",
                       width: `${stressValue}%`,
@@ -292,4 +292,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Hud;

@@ -2,6 +2,7 @@
   "name": "web",
   "homepage": "web/build",
   "private": true,
+  "type": "module",
   "version": "0.1.0",
   "scripts": {
     "start": "vite",
