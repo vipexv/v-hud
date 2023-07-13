@@ -49,6 +49,10 @@ RegisterNetEvent('seatbelt:client:ToggleSeatbelt', function() -- Triggered in sm
   Seatbelt = not Seatbelt
 end)
 
+RegisterNetEvent("UIMessage", function(action, data)
+  UIMessage(action, data)
+end)
+
 local function loadHud()
   toggleNuiFrame(true)
   CreateThread(function()
@@ -162,7 +166,6 @@ if Config.ESX then
       if data[i].name == 'hunger' then hunger = math.floor(data[i].percent) end
     end
 
-    local ped = PlayerPedId()
     local esxStatus = {
       hunger = hunger,
       thirst = thirst
@@ -233,16 +236,24 @@ local function loadUserInfo()
       end
     end)
   elseif Config.ESX and Config.DisplayUserInfo then
+    local society_money
+    RegisterNetEvent('esx_addonaccount:setMoney')
+    AddEventHandler('esx_addonaccount:setMoney', function(society, money)
+      if ESX.PlayerData.job and ESX.PlayerData.job.grade_name == 'boss' and 'society_' .. ESX.PlayerData.job.name == society then
+        society_money = money
+      end
+    end)
     CreateThread(function()
       local oldCash = nil
       local oldBank = nil
       local oldDirty = nil
       local oldJob = nil
       while Loaded do
-        local xPlayer = ESX.GetPlayerData()
-        local player_job = string.format("%s - %s", ESX.PlayerData.job.label, ESX.PlayerData.job.grade_label)
         local data = {}
-
+        local xPlayer = ESX.GetPlayerData()
+        data.job = string.format("%s - %s", xPlayer.job.label, xPlayer.job.grade_label)
+        -- UIMessage("debug", xPlayer)
+        data.society_money = society_money
         for k, v in pairs(xPlayer.accounts) do
           if v.name == "money" then
             data.cash = v.money
@@ -253,11 +264,13 @@ local function loadUserInfo()
           elseif v.name == "black_money" then
             data.dirty_cash = v.money
             -- print("Debug Stuff: [$"..data.cash.. "] Debug Stuff 2: [$" ..v.money.. "]")
+          elseif v.name == "society_money" then
+            data.society_money = v.money
+            -- print("Debug Stuff: [$"..data.cash.. "] Debug Stuff 2: [$" ..v.money.. "]")
           end
           Wait(1000)
         end
 
-        data.job = player_job
 
         local dataChanged = false
         if data.cash ~= oldCash or data.bank ~= oldBank or data.dirty_cash ~= oldDirty or data.job ~= oldJob then
@@ -271,7 +284,6 @@ local function loadUserInfo()
           oldJob = data.job
           UIMessage("userInfo", data)
         end
-        print(data.dirty_cash)
         Wait(1000)
       end
     end)

@@ -4,9 +4,8 @@
     "Wait",
     "exports",
     "RegisterCommand",
-    "debugPrint"
+    "debugPrint",
+    "society_money"
   ],
-  "Lua.diagnostics.disable": [
-    "deprecated"
-  ]
+  "Lua.diagnostics.disable": ["deprecated"]
 }

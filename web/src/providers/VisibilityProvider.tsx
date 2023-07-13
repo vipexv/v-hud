@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { useNuiEvent } from "../hooks/useNuiEvent";
+// import { useNuiEvent } from "../hooks/useNuiEvent";
 import { fetchNui } from "../utils/fetchNui";
 import { isEnvBrowser } from "../utils/misc";
 
@@ -25,9 +25,7 @@ export const VisibilityProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // useNuiEvent<boolean>("setVisible", setVisible);
 
-  // Handle pressing escape/backspace
   useEffect(() => {
-    // Only attach listener when we are visible
     if (!visible) return;
 
     const keyHandler = (e: KeyboardEvent) => {

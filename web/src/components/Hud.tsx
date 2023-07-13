@@ -35,6 +35,7 @@ type userInfo = {
   bank: number;
   dirty_cash: number;
   job: string;
+  society_money: number | string;
 };
 
 const Hud: React.FC = () => {
@@ -50,6 +51,7 @@ const Hud: React.FC = () => {
   const [cash, setCash] = useState(0);
   const [bank, setBank] = useState(0);
   const [dirtyCash, setDirtyCash] = useState<any>(null);
+  const [society_money, set_society_money] = useState<any>(null);
   const [user_job, setUserJob] = useState("Job");
   const [userId, setUserId] = useState("");
 
@@ -65,7 +67,7 @@ const Hud: React.FC = () => {
 
   // Debug
   useNuiEvent("debug", (data) => {
-    debugData(data, 500);
+    console.log(JSON.stringify(data));
   });
 
   useNuiEvent<UserStats>("hudStats", (retData) => {
@@ -135,6 +137,9 @@ const Hud: React.FC = () => {
     if (data.dirty_cash) {
       setDirtyCash(data.dirty_cash);
     }
+    if (data.society_money) {
+      set_society_money(data.society_money);
+    }
     setUserJob(data.job);
   });
 
@@ -174,6 +179,16 @@ const Hud: React.FC = () => {
               {user_job}
             </span>
           </p>
+          {society_money && (
+            <>
+              <p className="p-2 bg-black rounded font-bold mr-5 w-64">
+                <i className="fa-solid fa-briefcase-blank text-red-600"></i>
+                <span className="ml-2" id="black_cash">
+                  ${society_money}
+                </span>
+              </p>
+            </>
+          )}
         </div>
       )}
       <div
