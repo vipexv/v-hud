@@ -112,7 +112,7 @@ local function loadCarHud()
         local gear = GetVehicleCurrentGear(vehicle)
         local fuel = math.floor(GetVehicleFuelLevel(vehicle))
         local speedVal = GetEntitySpeed(vehicle) *
-            2.237 --Feel free to edit this if needed to switch to KMH, currently using MPH. it's 3.6 for KMH.
+            2.236936 --Feel free to edit this if needed to switch to KMH, currently using MPH. it's 3.6 for KMH.
         local speed = math.floor(speedVal)
         -- toggleNuiFrame(true)
         toggleVehHudFrame(true)
