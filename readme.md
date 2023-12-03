@@ -1,4 +1,9 @@
-## V-HUD
+## [V] HUD
+
+![](https://img.shields.io/github/downloads/vipexv/v-hud/total?logo=github)
+![](https://img.shields.io/github/downloads/vipexv/v-hud/latest/total?logo=github)
+![](https://img.shields.io/github/contributors/vipexv/v-hud?logo=github)
+![](https://img.shields.io/github/v/release/vipexv/v-hud?logo=github) 
 
 Minimalistic Standalone FiveM Hud.
 
