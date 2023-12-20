@@ -5,6 +5,9 @@
 ![](https://img.shields.io/github/contributors/vipexv/v-hud?logo=github)
 ![](https://img.shields.io/github/v/release/vipexv/v-hud?logo=github) 
 
+#### New Version: [Cfx.re Forums | [FREE] [STANDALONE] vHud | Advanced Minimalistic HUD](https://forum.cfx.re/t/free-standalone-vhud-advanced-minimalistic-hud/5194600)
+
+
 Minimalistic Standalone FiveM Hud.
 
 Notice: Bugs are 100% expected, this is still in development, please go ahead and report them in the issues tab or feel free to make a pull request if you feel like improving on something.
